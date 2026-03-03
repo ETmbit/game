@@ -13,7 +13,7 @@ Disclaimer:
 ETmbit extensions are distributed without any warranty.
 
 Dependencies:
-None
+General
 */
 
 
@@ -57,7 +57,7 @@ basic.forever(function () {
     if (gamePlayHandler) gamePlayHandler()
 })
 
-//% color="#00CC00" icon="\uf526"
+//% color="#00CC00" icon="\uf1d8"
 //% block="Game"
 //% block.loc.nl="Spel"
 namespace Game {

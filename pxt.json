@@ -5,7 +5,7 @@
         "core": "*",
         "radio": "*",
         "microphone": "*",
-        "buttonpad": "github:ETmbit/buttonpad#0c075573fa63a733867d909163aca940de4b3127"
+        "general": "github:ETmbit/general#346fda3da58d9bb6284149ea458a8c0ff57ba717"
     },
     "files": [
         "main.blocks",
