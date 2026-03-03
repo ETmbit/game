@@ -72,6 +72,10 @@ namespace Game {
         ypos = 0
         ysiz = 0
         dir = SpriteDir.Up
+        xmin = 0
+        ymin = 0
+        xmax = 4
+        ymax = 4
 
         constructor(xsize: number, ysize: number,
                     drawSprite: poshandler, undrawSprite: poshandler) {
@@ -79,6 +83,13 @@ namespace Game {
             this.undraw = undrawSprite
             this.xsiz = xsize
             this.ysiz = ysize
+        }
+
+        clipField(xmin: number, ymin: number, xmax: number, ymax: number) {
+            this.xmin = xmin
+            this.ymin = ymin
+            this.xmax = xmax
+            this.ymax = ymax
         }
 
         keepInField(infield: boolean) {
@@ -115,10 +126,10 @@ namespace Game {
             this.xpos = x - Math.floor(this.xsiz / 2)
             this.ypos = y - Math.floor(this.ysiz / 2)
             if (this.inField) {
-                if (this.xpos < 0) this.xpos = 0
-                if (this.ypos < 0) this.ypos = 0
-                if (this.xpos > 4) this.xpos = 4
-                if (this.ypos > 4) this.ypos = 4
+                if (this.xpos < this.xmin) this.xpos = this.xmin
+                if (this.ypos < this.ymin) this.ypos = this.ymin
+                if (this.xpos > this.xmax) this.xpos = this.xmax
+                if (this.ypos > this.ymax) this.ypos = this.ymax
             }
             if (this.draw)
                 this.draw(this.xpos, this.ypos)
@@ -158,6 +169,7 @@ namespace Game {
     export function createSprite(id: string, xsize: number, ysize: number,
                                  drawSprite: poshandler, undrawSprite: poshandler) : Sprite {
         let sprite = new Sprite(xsize, ysize, drawSprite, undrawSprite)
+        sprite.clipField(0, 0, fieldWidth - 1, fieldHeight - 1)
         sprites.push(sprite)
         ids.push(id)
         return sprite
@@ -165,10 +177,17 @@ namespace Game {
 
     let sprites: Sprite[] = []
     let ids: string[] = []
+    let fieldWidth = 5
+    let fieldHeight = 5
 
     export function init() {
         ETplay = false
         ETscore = 0
+    }
+
+    export function setField(height: number, width: number) {
+        fieldHeight = height
+        fieldWidth = width
     }
 
     export function getSprite(id: string) : Sprite {
@@ -220,7 +239,6 @@ namespace Game {
         if (sprite) sprite.show(displ == Visible.Yes)
     }
 
-    //% subcategory="Sprite"
     //% block="make %id move %dir"
     //% block.loc.nl="laat %id %dir gaan"
     export function setDirection(id: string, dir: SpriteDir) {
@@ -236,7 +254,6 @@ namespace Game {
         if (sprite) sprite.moveRand()
     }
 
-    //% subcategory="Sprite"
     //% block="move %id %steps steps"
     //% block.loc.nl="beweeg %id %steps stappen"
     export function moveSteps(id: string, steps: number) {
@@ -245,7 +262,6 @@ namespace Game {
         sprite.moveDir(steps)
     }
 
-    //% subcategory="Sprite"
     //% block="move %id %steps steps %dir"
     //% block.loc.nl="beweeg %id %steps stappen %dir"
     export function moveDirection(id: string, steps: number, dir: SpriteDir) {
@@ -255,15 +271,15 @@ namespace Game {
         sprite.moveDir(steps)
     }
 
-    //% block="replace %id with (%xpos,%ypos)"
-    //% block.loc.nl="verplaats A met (%xpos,%ypos)"
+    //% block="change %id position with (%xpos,%ypos)"
+    //% block.loc.nl="verplaats %id met (%xpos,%ypos)"
     export function moveRelative(id: string, xpos: number, ypos: number) {
         let sprite = getSprite(id)
         if (sprite) sprite.moveTo(xpos, ypos)
     }
 
     //% block="put %id at position (%xpos,%ypos)"
-    //% block.loc.nl="plaats A op (%xpos,%ypos)"
+    //% block.loc.nl="plaats %id op (%xpos,%ypos)"
     export function moveTo(id: string, xpos: number, ypos: number) {
         let sprite = getSprite(id)
         if (sprite) sprite.moveTo(xpos, ypos)
